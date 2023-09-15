@@ -13,7 +13,7 @@ RUN rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
     apt-get update && \
     apt-get install -y \
-    apt-util \
+    apt-utils \
     software-properties-common \
     build-essential \
     curl \

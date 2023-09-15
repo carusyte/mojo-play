@@ -27,6 +27,7 @@ RUN echo 'export LLVM_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer' >> ~/.bashrc
 # Create a symlink for python -> python3.10
 RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN pip3 install --upgrade pip
+RUN pip3 install find-libpython
 
 RUN libpython_path=$(find_libpython) && \
     echo '#!/bin/bash' > install_mojo.sh && \

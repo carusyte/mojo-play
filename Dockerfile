@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1.6
+
 # Start from the Ubuntu 20.04 base image
 FROM ubuntu:20.04
 

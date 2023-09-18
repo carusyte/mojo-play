@@ -1,4 +1,4 @@
 {
     "name": "mojo",
-    "image":"carusyte/mojo:1.0.0"
+    "image":"carusyte/mojo:latest"
 }

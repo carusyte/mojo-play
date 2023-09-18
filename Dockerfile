@@ -1,9 +1,6 @@
 # Start from the Ubuntu 20.04 base image
 FROM ubuntu:20.04
 
-# Build argument for Modular authentication code
-ARG MODULAR_AUTH
-
 # Avoid prompts with apt
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -31,21 +28,17 @@ RUN pip3 install find-libpython
 
 RUN libpython_path=$(find_libpython) && \
     echo '#!/bin/bash' > install_mojo.sh && \
-    echo 'export MOJO_PYTHON_LIBRARY="$libpython_path"' | tee -a ~/.bashrc install_mojo.sh && \
+    echo 'export MOJO_PYTHON_LIBRARY="'$libpython_path'"' | tee -a ~/.bashrc install_mojo.sh && \
+    echo 'MODULAR_AUTH=`cat /run/secrets/MODULAR_AUTH`' && \
     echo "curl https://get.modular.com | MODULAR_AUTH=$MODULAR_AUTH sh -" >> install_mojo.sh && \
     echo 'modular clean' >> install_mojo.sh && \
     echo 'modular install mojo' >> install_mojo.sh && \
     chmod +x install_mojo.sh
 
-RUN /bin/bash -c "source install_mojo.sh" && \
+RUN --mount=type=secret,id=MODULAR_AUTH ./install_mojo.sh && \
     rm -f install_mojo.sh
 
 RUN echo 'export MODULAR_HOME="/root/.modular"' >> ~/.bashrc
 RUN echo 'export PATH="/root/.modular/pkg/packages.modular.com_mojo/bin:$PATH"' >> ~/.bashrc
-RUN echo 'PS1="_# "' >> ~/.bashrc
-
-# Verify Python version
-RUN python3 --version
-RUN python --version
 
 CMD ["/bin/bash"]

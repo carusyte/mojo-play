@@ -1,4 +1,5 @@
 # Dockerfile to build image for Mojo SDK
+
 1. Clone the repo
 1. Run the following command to build image. Remember to replace the `MODULAR_AUTH` environment variable with yours obtained from modular.com. Preferrably the build process is more likely to succeed in a cloud VM outside network-restricted area.
 

@@ -9,6 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN rm -rf /var/lib/apt/lists/* && \
     apt-get autoclean && \
     apt-get clean && \
+    add-apt-repository ppa:deadsnakes/ppa && \
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
@@ -18,17 +19,15 @@ RUN rm -rf /var/lib/apt/lists/* && \
     curl \
     vim \
     llvm \
+    python3.11 python3-pip \
     apt-transport-https
 
 RUN echo 'export LLVM_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer' >> ~/.bashrc
 
-RUN add-apt-repository ppa:deadsnakes/ppa
-RUN apt-get install -y python3.11 python3-pip
-
-# Create a symlink for python -> python3.10
+# Create a symlink for python -> python3.11
 RUN ln -s /usr/bin/python3 /usr/bin/python
-RUN pip3 install --upgrade pip
-RUN pip3 install find-libpython
+RUN pip3 install --upgrade pip && \
+    pip3 install find-libpython
 
 RUN libpython_path=$(find_libpython) && \
     echo '#!/bin/bash' > install_mojo.sh && \

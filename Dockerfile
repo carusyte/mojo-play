@@ -1,7 +1,6 @@
 # syntax=docker/dockerfile:1.6
 
-# Start from the Ubuntu 20.04 base image
-FROM ubuntu:20.04
+FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 
 # Avoid prompts with apt
 ENV DEBIAN_FRONTEND=noninteractive
@@ -11,6 +10,7 @@ RUN rm -rf /var/lib/apt/lists/* && \
     apt-get autoclean && \
     apt-get clean && \
     apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y \
     apt-utils \
     software-properties-common \
@@ -18,10 +18,12 @@ RUN rm -rf /var/lib/apt/lists/* && \
     curl \
     vim \
     llvm \
-    python3 python3-pip \
     apt-transport-https
 
 RUN echo 'export LLVM_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer' >> ~/.bashrc
+
+RUN add-apt-repository ppa:deadsnakes/ppa
+RUN apt-get install -y python3.11 python3-pip
 
 # Create a symlink for python -> python3.10
 RUN ln -s /usr/bin/python3 /usr/bin/python

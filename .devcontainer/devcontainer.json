@@ -1,4 +1,8 @@
 {
     "name": "mojo",
-    "image":"carusyte/mojo:latest"
+    "image":"carusyte/mojo:latest",
+    // "runArgs": [
+    //     "--network=host",
+    //     "--privileged"
+    // ]
 }

@@ -9,7 +9,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN rm -rf /var/lib/apt/lists/* && \
     apt-get autoclean && \
     apt-get clean && \
-    add-apt-repository ppa:deadsnakes/ppa && \
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
@@ -19,19 +18,20 @@ RUN rm -rf /var/lib/apt/lists/* && \
     curl \
     vim \
     llvm \
-    python3.11 python3-pip \
+    python3 python3-dev python3-pip \
     apt-transport-https
 
 RUN echo 'export LLVM_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer' >> ~/.bashrc
 
-# Create a symlink for python -> python3.11
 RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN pip3 install --upgrade pip && \
     pip3 install find-libpython
 
+USER vscode
+
 RUN libpython_path=$(find_libpython) && \
     echo '#!/bin/bash' > install_mojo.sh && \
-    echo 'export MOJO_PYTHON_LIBRARY="'$libpython_path'"' | tee -a ~/.bashrc install_mojo.sh && \
+    echo 'export MOJO_PYTHON_LIBRARY="'$libpython_path'"' | tee -a ~/.profile install_mojo.sh && \
     echo 'MODULAR_AUTH=`cat /run/secrets/modularauth`' >> install_mojo.sh && \
     echo 'curl https://get.modular.com | MODULAR_AUTH=$MODULAR_AUTH sh -' >> install_mojo.sh && \
     echo 'modular clean' >> install_mojo.sh && \
@@ -41,7 +41,7 @@ RUN libpython_path=$(find_libpython) && \
 RUN --mount=type=secret,id=modularauth ./install_mojo.sh && \
     rm -f install_mojo.sh
 
-RUN echo 'export MODULAR_HOME="/root/.modular"' >> ~/.bashrc
-RUN echo 'export PATH="/root/.modular/pkg/packages.modular.com_mojo/bin:$PATH"' >> ~/.bashrc
+RUN echo 'export MODULAR_HOME="/root/.modular"' >> ~/.profile
+RUN echo 'export PATH="/root/.modular/pkg/packages.modular.com_mojo/bin:$PATH"' >> ~/.profile
 
 CMD ["/bin/bash"]

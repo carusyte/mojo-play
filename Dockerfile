@@ -41,7 +41,7 @@ RUN libpython_path=$(find_libpython) && \
 RUN --mount=type=secret,id=modularauth ./install_mojo.sh && \
     rm -f install_mojo.sh
 
-RUN echo 'export MODULAR_HOME="/root/.modular"' >> ~/.profile
-RUN echo 'export PATH="/root/.modular/pkg/packages.modular.com_mojo/bin:$PATH"' >> ~/.profile
+RUN echo 'export MODULAR_HOME="/home/vscode/.modular"' >> ~/.profile
+RUN echo 'export PATH="/home/vscode/.modular/pkg/packages.modular.com_mojo/bin:$PATH"' >> ~/.profile
 
 CMD ["/bin/bash"]

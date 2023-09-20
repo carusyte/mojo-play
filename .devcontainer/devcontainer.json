@@ -1,4 +1,14 @@
 {
     "name": "mojo",
-    "image":"carusyte/mojo:latest"
+
+    "image":"carusyte/mojo:latest",
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "modular-mojotools.vscode-mojo",
+                "ms-azuretools.vscode-docker"
+            ]
+        }
+    }
 }

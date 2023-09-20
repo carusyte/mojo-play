@@ -29,6 +29,8 @@ RUN pip3 install --upgrade pip && \
 
 USER vscode
 
+WORKDIR /tmp
+
 RUN libpython_path=$(find_libpython) && \
     echo '#!/bin/bash' > install_mojo.sh && \
     echo 'export MOJO_PYTHON_LIBRARY="'$libpython_path'"' | tee -a ~/.profile install_mojo.sh && \

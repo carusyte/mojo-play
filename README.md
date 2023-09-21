@@ -1,6 +1,8 @@
-# Easier to play with Mojo🔥
+# Easier to Jumpstart with Mojo🔥
 
-For those who are hampered setting local development environment for Mojo🔥
+For those who are hampered setting up local environment for Mojo🔥, before next version with better installation experience is in place.
+
+Related issues: [#800](https://github.com/modularml/mojo/issues/800), [#822](https://github.com/modularml/mojo/issues/822), [#825](https://github.com/modularml/mojo/issues/825), [#836](https://github.com/modularml/mojo/issues/836), [#838](https://github.com/modularml/mojo/issues/838), [#850](https://github.com/modularml/mojo/issues/850), [#866](<https://github.com/modularml/mojo/issues/866>)
 
 ## VS Code Dev Container
 

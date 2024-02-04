@@ -36,6 +36,8 @@ RUN ln -s /usr/bin/python3.12 /usr/bin/python && \
 
 USER vscode
 
+ENV PATH="${PATH}:/home/vscode/.local/bin"
+
 WORKDIR /build
 
 RUN pip install \

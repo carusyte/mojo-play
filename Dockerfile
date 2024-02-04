@@ -25,28 +25,22 @@ RUN rm -rf /var/lib/apt/lists/* && \
     # Add deadsnakes PPA for latest Python versions
     add-apt-repository ppa:deadsnakes/ppa && \
     apt-get update && \
-    apt-get install -y python3.12
+    apt-get install -y python3.12 python3-pip
 
-RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12
+RUN ln -s /usr/bin/python3.12 /usr/bin/python
 
-RUN ln -s /usr/bin/python3.12 /usr/bin/python && \
-    ln -s /usr/local/lib/python3.12/site-packages/pip/pip3.12 /usr/bin/pip
-
-# RUN python -m ensurepip --upgrade
-
-USER vscode
-
-ENV PATH="${PATH}:/home/vscode/.local/bin"
-
-WORKDIR /build
-
-RUN pip install \
+RUN pip3 install \
         --default-timeout=120000 \
         --trusted-host pypi.org \
         --trusted-host pypi.python.org \
         --trusted-host files.pythonhosted.org \
-        find-libpython && \
-    libpython_path=$(python -m find_libpython) && \
+        find-libpython
+
+USER vscode
+
+WORKDIR /build
+
+RUN libpython_path=$(find_libpython) && \
     echo '#!/bin/bash' > install_mojo.sh && \
     echo 'export LLVM_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer' | tee -a ~/.bashrc install_mojo.sh && \
     echo 'export MOJO_PYTHON_LIBRARY="'$libpython_path'"' | tee -a ~/.bashrc install_mojo.sh && \

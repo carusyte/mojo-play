@@ -47,6 +47,7 @@ RUN libpython_path=$(find_libpython) && \
     echo 'MODULAR_AUTH=`cat /run/secrets/modularauth`' >> install_mojo.sh && \
     echo 'curl https://get.modular.com | MODULAR_AUTH=$MODULAR_AUTH sh -' >> install_mojo.sh && \
     echo 'modular clean' >> install_mojo.sh && \
+    echo 'modular auth $MODULAR_AUTH &&' >> install_mojo.sh && \
     echo 'modular install mojo' >> install_mojo.sh && \
     chmod +x install_mojo.sh
 

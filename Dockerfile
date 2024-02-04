@@ -27,8 +27,10 @@ RUN rm -rf /var/lib/apt/lists/* && \
     apt-get update && \
     apt-get install -y python3.12
 
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12
+
 RUN ln -s /usr/bin/python3.12 /usr/bin/python && \
-    ln -s /usr/bin/pip3.12 /usr/bin/pip
+    ln -s /usr/local/lib/python3.12/site-packages/pip/pip3.12 /usr/bin/pip
 
 # RUN python -m ensurepip --upgrade
 

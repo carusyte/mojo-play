@@ -25,7 +25,7 @@ RUN rm -rf /var/lib/apt/lists/* && \
     # Add deadsnakes PPA for latest Python versions
     add-apt-repository ppa:deadsnakes/ppa && \
     apt-get update && \
-    apt-get install -y python3.12
+    apt-get install -y python3.12 python3.12-venv
 
 RUN ln -s /usr/bin/python3.12 /usr/bin/python
 

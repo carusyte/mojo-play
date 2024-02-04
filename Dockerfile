@@ -37,9 +37,10 @@ USER vscode
 
 WORKDIR /build
 
-RUN echo '#!/bin/bash' > install_mojo.sh && \
-    echo 'export LLVM_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer' | tee -a ~/.bashrc install_mojo.sh && \
-    echo "export MOJO_PYTHON_LIBRARY=$(find_libpython)" | tee -a ~/.bashrc install_mojo.sh && \
+RUN BASHRC=$( [ -f "$HOME/.bash_profile" ] && echo "$HOME/.bash_profile" || echo "$HOME/.bashrc" ) && \
+    echo '#!/bin/bash' > install_mojo.sh && \
+    echo 'export LLVM_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer' | tee -a "$BASHRC" install_mojo.sh && \
+    echo "export MOJO_PYTHON_LIBRARY=$(find_libpython)" | tee -a "$BASHRC" install_mojo.sh && \
     echo 'MODULAR_AUTH=`cat /run/secrets/modularauth`' >> install_mojo.sh && \
     echo 'curl https://get.modular.com | MODULAR_AUTH=$MODULAR_AUTH sh -' >> install_mojo.sh && \
     echo 'modular clean' >> install_mojo.sh && \
@@ -47,10 +48,8 @@ RUN echo '#!/bin/bash' > install_mojo.sh && \
     echo 'modular install mojo' >> install_mojo.sh && \
     chmod +x install_mojo.sh && \
     --mount=type=secret,id=modularauth,uid=1000 ./install_mojo.sh && \
-    rm -f install_mojo.sh
-
-# Update PATH environment variable
-RUN BASHRC=$( [ -f "$HOME/.bash_profile" ] && echo "$HOME/.bash_profile" || echo "$HOME/.bashrc" ) && \
+    rm -f install_mojo.sh && \
+    # Update PATH environment variable
     echo 'export MODULAR_HOME="$HOME/.modular"' >> "$BASHRC" && \
     echo 'export PATH="$MODULAR_HOME/pkg/packages.modular.com_mojo/bin:$PATH"' >> "$BASHRC"
 

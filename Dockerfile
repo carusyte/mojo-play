@@ -29,13 +29,13 @@ RUN rm -rf /var/lib/apt/lists/* && \
 
 RUN ln -s /usr/bin/python3.12 /usr/bin/python
 
-RUN pip3 install \
+RUN pip install \
         --default-timeout=120000 \
         --trusted-host pypi.org \
         --trusted-host pypi.python.org \
         --trusted-host files.pythonhosted.org \
         --upgrade pip && \
-    pip3 install \
+    pip install \
         --default-timeout=120000 \
         --trusted-host pypi.org \
         --trusted-host pypi.python.org \

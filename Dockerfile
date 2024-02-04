@@ -58,6 +58,8 @@ RUN echo 'export MODULAR_HOME="$HOME/.modular"' >> ~/.bashrc
 RUN echo 'export PATH="$MODULAR_HOME/pkg/packages.modular.com_mojo/bin:$PATH"' >> ~/.bashrc
 
 # Clean up to reduce image size
+USER 0
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
+USER vscode
 CMD ["/bin/bash"]

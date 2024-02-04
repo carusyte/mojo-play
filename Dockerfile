@@ -7,23 +7,40 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install necessary tools, libraries, and utilities
 RUN rm -rf /var/lib/apt/lists/* && \
+    echo 'Acquire::Retries "10";' > /etc/apt/apt.conf.d/80-retries && \
     apt-get autoclean && \
     apt-get clean && \
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
+    ca-certificates \
     apt-utils \
     software-properties-common \
     build-essential \
     curl \
     vim \
     llvm \
-    python3 python3-dev python3-pip \
-    apt-transport-https
+    software-properties-common \
+    apt-transport-https && \
+    # Add deadsnakes PPA for latest Python versions
+    add-apt-repository ppa:deadsnakes/ppa && \
+    apt-get update && \
+    apt-get install -y python3.12
 
-RUN ln -s /usr/bin/python3 /usr/bin/python
-RUN pip3 install --upgrade pip && \
-    pip3 install find-libpython
+RUN ln -s /usr/bin/python3.12 /usr/bin/python
+
+RUN pip3 install \
+        --default-timeout=120000 \
+        --trusted-host pypi.org \
+        --trusted-host pypi.python.org \
+        --trusted-host files.pythonhosted.org \
+        --upgrade pip && \
+    pip3 install \
+        --default-timeout=120000 \
+        --trusted-host pypi.org \
+        --trusted-host pypi.python.org \
+        --trusted-host files.pythonhosted.org \
+        find-libpython
 
 USER vscode
 
@@ -44,5 +61,8 @@ RUN --mount=type=secret,id=modularauth,uid=1000 ./install_mojo.sh && \
 
 RUN echo 'export MODULAR_HOME="$HOME/.modular"' >> ~/.bashrc
 RUN echo 'export PATH="$MODULAR_HOME/pkg/packages.modular.com_mojo/bin:$PATH"' >> ~/.bashrc
+
+# Clean up to reduce image size
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 CMD ["/bin/bash"]

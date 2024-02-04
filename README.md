@@ -30,5 +30,3 @@ docker build --no-cache \
     -t <USE_YOUR_OWN_ID>/mojo:0.1 \
     .
 ```
-
-

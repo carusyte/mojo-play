@@ -46,10 +46,12 @@ RUN BASHRC=$( [ -f "$HOME/.bash_profile" ] && echo "$HOME/.bash_profile" || echo
     echo 'modular clean' >> install_mojo.sh && \
     echo 'modular auth $MODULAR_AUTH &&' >> install_mojo.sh && \
     echo 'modular install mojo' >> install_mojo.sh && \
-    chmod +x install_mojo.sh && \
-    --mount=type=secret,id=modularauth,uid=1000 ./install_mojo.sh && \
+    chmod +x install_mojo.sh
+
+RUN --mount=type=secret,id=modularauth,uid=1000 ./install_mojo.sh && \
     rm -f install_mojo.sh && \
     # Update PATH environment variable
+    BASHRC=$( [ -f "$HOME/.bash_profile" ] && echo "$HOME/.bash_profile" || echo "$HOME/.bashrc" ) && \
     echo 'export MODULAR_HOME="$HOME/.modular"' >> "$BASHRC" && \
     echo 'export PATH="$MODULAR_HOME/pkg/packages.modular.com_mojo/bin:$PATH"' >> "$BASHRC"
 
